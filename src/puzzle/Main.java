@@ -5,7 +5,12 @@
  */
 package puzzle;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import sac.graph.BestFirstSearch;
 import sac.graph.GraphSearchAlgorithm;
 import sac.graph.GraphSearchConfigurator;
@@ -22,7 +27,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Sudoku s = new Sudoku();
+       /* Sudoku s = new Sudoku();
 		
 		String txt = "003020600900305001001800400008102900700000000000008200002600500800203009005010300";
 		//003020600900305001001806400008102900700000008006708200002609500800203009005010300
@@ -46,6 +51,20 @@ public class Main {
 		System.out.println("Closed: " + a.getClosedSet().size());
 		System.out.println("Open: " + a.getOpenSet().size());
 		System.out.println("Solutions: " + a.getSolutions().size());
+*/
+       Puzzle p = new Puzzle();
+        try {
+            p.blendPuzzle(20);
+
+            System.out.println(p.toString());
+            Scanner in = new Scanner(System.in);
+            int num = in.nextInt();
+
+            p.makeMove(num);
+            System.out.println(p.toString());
+        } catch (InvalidDirection ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }
