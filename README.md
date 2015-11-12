@@ -20,4 +20,4 @@
   - makeMove()
   - toString()
   
-Minister zdrowia poleca skopiować projekt przed skorzystaniem z GitHuba
+Minister zdrowia ostrzega: skopiuj projekt przed skorzystaniem z GitHuba
