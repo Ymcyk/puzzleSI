@@ -9,15 +9,15 @@
         -------------
 
 *** do zrobienia ***
-  - hashCode()
-  - isSolution()
-  - generateChildren()
-  - heurestyki
+  - heurestyka Manhattan
 
 *** zrobione ***
   - konstruktory  
   - metoda mieszajaca
   - makeMove()
   - toString()
+  - hashCode()
+  - isSolution()
+  - generateChildren()
   
 Minister zdrowia ostrzega: skopiuj projekt przed skorzystaniem z GitHuba
