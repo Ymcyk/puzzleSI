@@ -5,8 +5,12 @@
  */
 package puzzle;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import sac.State;
+import sac.examples.slidingpuzzle.HFunctionMisplacedTiles;
 import sac.graph.GraphState;
 import sac.graph.GraphStateImpl;
 
@@ -15,13 +19,14 @@ import sac.graph.GraphStateImpl;
  * @author Piotr
  */
 class InvalidDirection extends Exception{
+    // Gdy zostanie podany niepoprawny kierunek, to jest podnoszony ten wyjątek
     public InvalidDirection(String msg){
         super(msg);
     }
 }
 
 public class Puzzle extends GraphStateImpl {
-    public static final int n = 3;
+    public static final int n = 4;
     //public static final int N = n*n;
     public byte [][] board = null;
     
@@ -31,12 +36,49 @@ public class Puzzle extends GraphStateImpl {
     private int x = 0;  // wiersze tablicy
     private int y = 0;  // kolumny tablicy
     
+    static {
+        setHFunction(new HFunctionMisplacedTiles() {
+            @Override
+            public double calculate(State state) {
+                double h = 0.0;
+                byte value = 0;
+                Puzzle s = (Puzzle)state;
+                for( int i = 0; i < n; i++){
+                    for( int j = 0; j < n; j++){
+                        if( (s.board[i][j] != 0) && (s.board[i][j] != value))
+                            h += 1.0;
+                        
+                        value++;
+                    }
+                }
+                return h;
+            }
+        });
+    }
+    
+    // Do zrobienia jeszcze heurestyka Manhattan
+    // Sposób jej liczenia jest w dokumentacji sac (na stronie z labkami)
+    // Na zajęciach będziemy musieli obie porównać, więc jedna będzie zakomentowana
+ /*   
+    static {
+        setHFunction(new HFunctionManhattan() {
+            @Override
+            public double calculate(State state) {
+
+                return ;
+            }
+        });
+    }
+*/
+    
     public Puzzle() {
         this.board = new byte[n][n];
+        byte value = 0;
         
         for( int i = 0; i < n; i++)
             for( int j = 0; j < n; j++)
-                this.board[i][j] = (byte)((n*i)+j); 
+                this.board[i][j] = value++;
+                //this.board[i][j] = (byte)((n*i)+j); 
     }
     
     public Puzzle( Puzzle copy){
@@ -80,13 +122,11 @@ public class Puzzle extends GraphStateImpl {
         }
             
         if( tmpX < 0 || tmpX >= n || tmpY < 0 || tmpY >= n){
-            System.out.println("Zle: " + tmpX + " " + tmpY);
-            tmpX = x;
-            tmpY = y;
+            //System.out.println("Zle: " + tmpX + " " + tmpY);
             return false;
         }
             
-        System.out.println(x + " " + y + " do " + tmpX + " " + tmpY);
+        //System.out.println(x + " " + y + " do " + tmpX + " " + tmpY);
         temp = board[tmpX][tmpY];
         board[tmpX][tmpY] = 0;
         board[x][y] = temp;
@@ -109,14 +149,48 @@ public class Puzzle extends GraphStateImpl {
     }
 
     @Override
-    public List<GraphState> generateChildren() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<GraphState> generateChildren(){
+        List<GraphState> children= new ArrayList<GraphState>();
+        
+        for( int i = 0; i < 4; i++){
+            Puzzle child = new Puzzle(this);
+            try{
+                
+                if(child.makeMove(i))
+                    children.add(child);
+                
+            } catch (InvalidDirection e) {
+                System.out.println(e.getStackTrace());
+            }
+        }
+        
+        return children;
     }
 
     @Override
     public boolean isSolution() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        byte value = 0;
+        
+        for( int i = 0; i < n; i++)
+            for( int j = 0; j < n; j++){
+                if(this.board[i][j] != value++)
+                return false;
+            }
+
+        return true;
     }
-    
+
+    @Override
+    public int hashCode() {
+        byte[] copy = new byte[n*n];
+        int k = 0;
+        for( int i = 0; i < n; i++){
+            for( int j = 0; j < n; j++){
+                copy[k++] = board[i][j];
+            }
+        }   
+        
+        return Arrays.hashCode(copy);
+    }
 }
 
