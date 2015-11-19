@@ -5,17 +5,10 @@
  */
 package puzzle;
 
-import java.io.IOException;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import sac.graph.BestFirstSearch;
+import sac.graph.AStar;
 import sac.graph.GraphSearchAlgorithm;
 import sac.graph.GraphSearchConfigurator;
 import sac.graph.GraphState;
-import sudoku.Sudoku;
 
 /**
  *
@@ -53,18 +46,31 @@ public class Main {
 		System.out.println("Solutions: " + a.getSolutions().size());
 */
        Puzzle p = new Puzzle();
+
         try {
-            p.blendPuzzle(20);
+            p.blendPuzzle(30);
+            System.out.println("-------Puzzle niepoukładane-------");
+            System.out.println(p);
+            GraphSearchConfigurator conf = new GraphSearchConfigurator();
+            conf.setWantedNumberOfSolutions(1);
+		
+            GraphSearchAlgorithm a = new AStar(p, conf);
+            a.execute();
+            GraphState sol = a.getBestSoFar();
 
-            System.out.println(p.toString());
-            Scanner in = new Scanner(System.in);
-            int num = in.nextInt();
+            System.out.println("-------Puzzle rozwiązane-------");
+            System.out.println(sol);
 
-            p.makeMove(num);
-            System.out.println(p.toString());
+            
+            System.out.println("Time: " + a.getDurationTime());
+            System.out.println("Closed: " + a.getClosedSet().size());
+            System.out.println("Open: " + a.getOpenSet().size());
+            System.out.println("Solutions: " + a.getSolutions().size());
+            
         } catch (InvalidDirection ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(ex);
         }
+        
     }
     
 }
