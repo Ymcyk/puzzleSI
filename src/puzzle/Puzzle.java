@@ -26,7 +26,7 @@ class InvalidDirection extends Exception{
 }
 
 public class Puzzle extends GraphStateImpl {
-    public static final int n = 4;
+    public static int n = 4;
     //public static final int N = n*n;
     public byte [][] board = null;
     
@@ -36,6 +36,11 @@ public class Puzzle extends GraphStateImpl {
     private int x = 0;  // wiersze tablicy
     private int y = 0;  // kolumny tablicy
     
+    //static { 
+      //  setHFunction(new HFunctionMisplacedTiles());
+        //        };
+    
+    /*
     static {
         setHFunction(new HFunctionMisplacedTiles() {
             @Override
@@ -54,7 +59,7 @@ public class Puzzle extends GraphStateImpl {
                 return h;
             }
         });
-    }
+    }*/
     
     // Do zrobienia jeszcze heurestyka Manhattan
     // Sposób jej liczenia jest w dokumentacji sac (na stronie z labkami)
