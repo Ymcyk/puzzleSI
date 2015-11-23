@@ -20,15 +20,15 @@ public class HFunctionMisplacedTiles extends StateFunction {
         double h = 0.0;
                 byte value = 0;
                 Puzzle s = (Puzzle)state;
-                for( int i = 0; i < n; i++){
-                    for( int j = 0; j < n; j++){
+                for( int i = 0; i < s.board.length; i++){
+                    for( int j = 0; j < s.board.length; j++){
                         if( (s.board[i][j] != 0) && (s.board[i][j] != value))
                             h += 1.0;
                         
                         value++;
                     }
                 }
-                return h;
+        return h;
     }
     
 }

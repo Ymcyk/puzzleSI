@@ -33,8 +33,8 @@ public class HFunctionManhattan extends StateFunction {
         int i1 = s.board[index][index2] / n;
         int j1 = s.board[index][index2] % n;
         //int i2 = index / n;
-        int i2 = ((n*index) + index2) / n;
-        int j2 = ((n*index) + index2) % n;
+        int i2 = ((n * index) + index2) / n;
+        int j2 = ((n * index) + index2) % n;
        
         return Math.abs(i1 - i2) + Math.abs(j1 - j2);
     }
