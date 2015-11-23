@@ -19,53 +19,49 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-       /* Sudoku s = new Sudoku();
-		
-		String txt = "003020600900305001001800400008102900700000000000008200002600500800203009005010300";
-		//003020600900305001001806400008102900700000008006708200002609500800203009005010300
-		s.fromStringN9(txt);
-		System.out.println(s.isLegal());
-		System.out.println(s.unknowns);
-		
-		GraphSearchConfigurator conf = new GraphSearchConfigurator();
-		conf.setWantedNumberOfSolutions(Integer.MAX_VALUE);
-		
-		GraphSearchAlgorithm a = new BestFirstSearch(s, conf);
-		a.execute();
-		List<GraphState> sols = a.getSolutions();
-		
-		for (GraphState sol:sols) {
-			System.out.println(sol);
-			System.out.println("---");
-		}
-		
-		System.out.println("Time: " + a.getDurationTime());
-		System.out.println("Closed: " + a.getClosedSet().size());
-		System.out.println("Open: " + a.getOpenSet().size());
-		System.out.println("Solutions: " + a.getSolutions().size());
-*/
-       Puzzle p = new Puzzle();
+    public static void main(String[] args) throws InvalidDirection {
+       
+        float czas = 0;
+        double droga = 0;
+        int open = 0;
+        int closed = 0;
+       
+        
+        Puzzle.n = 3;
+        Puzzle p = new Puzzle();
 
         try {
-            p.blendPuzzle(30);
-            System.out.println("-------Puzzle niepoukładane-------");
-            System.out.println(p);
-            GraphSearchConfigurator conf = new GraphSearchConfigurator();
-            conf.setWantedNumberOfSolutions(1);
-		
-            GraphSearchAlgorithm a = new AStar(p, conf);
-            a.execute();
-            GraphState sol = a.getBestSoFar();
-
-            System.out.println("-------Puzzle rozwiązane-------");
-            System.out.println(sol);
-
+            for (int i=0;i<100;i++){
+                p=new Puzzle();
             
-            System.out.println("Time: " + a.getDurationTime());
-            System.out.println("Closed: " + a.getClosedSet().size());
-            System.out.println("Open: " + a.getOpenSet().size());
-            System.out.println("Solutions: " + a.getSolutions().size());
+                p.blendPuzzle(1000);
+                
+                
+                Puzzle.setHFunction(new HFunctionManhattan());
+                //Puzzle.setHFunction(new HFunctionMisplacedTiles());
+                GraphSearchConfigurator conf = new GraphSearchConfigurator();
+                conf.setWantedNumberOfSolutions(1);
+                GraphSearchAlgorithm a = new AStar(p, conf);
+                a.execute();
+                GraphState sol = a.getBestSoFar();
+
+                czas += a.getDurationTime();
+                closed += a.getClosedSet().size();
+                open += a.getOpenSet().size();
+                droga += sol.getPath().size();
+                
+                //System.out.println("Czas: " + czas + "petla: "+ i);
+            }
+            czas=czas/100;
+            closed=closed/100;
+            open=open/100;
+            droga=droga/100;
+            
+            System.out.println("Czas: " + czas);
+            System.out.println("Closed: "+ closed);
+            System.out.println("Open: "+ open);
+            System.out.println("Droga: "+ droga);
+            
             
         } catch (InvalidDirection ex) {
             System.out.println(ex);
